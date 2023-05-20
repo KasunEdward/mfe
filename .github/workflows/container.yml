@@ -14,13 +14,15 @@ defaults:
 jobs:
     build:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+              node-version: [16.x]
 
         steps:
             - uses: actions/checkout@v2
-            - run: export NODE_OPTIONS=--openssl-legacy-provider
+            # - run: export NODE_OPTIONS=--openssl-legacy-provider
             - run: npm install --save --legacy-peer-deps
             - run: npm run build
-            - run: npm audit --fo
 
             - uses: shinyinc/action-aws-cli@v1.2
             - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
